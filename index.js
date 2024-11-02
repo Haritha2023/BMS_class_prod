@@ -1,6 +1,6 @@
 const express = require("express");
 var cors = require("cors");
-
+const path = require('path')
 require("dotenv").config();
 
 const dbConfig = require("./config/dbConfig");
@@ -23,6 +23,16 @@ app.use("/api/movies", movieRoutes);
 app.use("/api/theatres", theatreRoutes);
 app.use("/api/shows", showRoutes);
 app.use("/api/bookings", bookingRoutes);
+
+console.log(path)
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "public")));
+
+// Handle client-side routing, return all other requests to `index.html`
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
 app.listen(PORT, () => {
   console.log("server running");
 });
